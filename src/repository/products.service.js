@@ -2,6 +2,10 @@ import { ProductsDAO } from "../dao/factory.js";
 
 import { JSONify } from "../utils.js";
 
+import CustomError from "../services/errors/CustomError.js";
+import { generateProductErrorInfo } from "../services/errors/info.js";
+import EErrors from "../services/errors/enums.js";
+
 class ProductsService {
   constructor(dao) {
     this.productsDAO = dao;
@@ -66,9 +70,14 @@ class ProductsService {
       !prod.thumbnail ||
       !prod.code ||
       !prod.stock
-    )
-      return "missingInfo";
-
+    ) {
+      CustomError.createError({
+        name: "Product creation error",
+        cause: generateProductErrorInfo(prod),
+        message: "Error trying to create product",
+        code: EErrors.MISSING_OR_WRONG_DATA_ERRORS,
+      });
+    }
     prod.status = true;
     return await this.productsDAO.addProduct(prod);
   }

@@ -101,6 +101,7 @@ export function generateUser() {
 
 export function generateProduct() {
   return {
+    _id: faker.database.mongodbObjectId(),
     title: faker.commerce.product(),
     description: faker.commerce.productDescription(),
     price: faker.number.int({ min: 1000, max: 500000 }),

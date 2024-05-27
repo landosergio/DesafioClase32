@@ -6,7 +6,6 @@ import jwt from "passport-jwt";
 
 import { UserModel } from "../dao/models/User.model.js";
 import { cartsService } from "../repository/carts.service.js";
-import mongoose from "mongoose";
 
 import { createHash, isValidPassword } from "../utils.js";
 import config from "./config.js";

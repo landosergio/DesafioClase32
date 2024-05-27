@@ -40,8 +40,6 @@ app.use(cookieParser());
 initializePassport();
 app.use(passport.initialize());
 
-app.use(errorHandler);
-
 //Socket.io
 const socketServer = new Server(httpServer);
 
@@ -89,5 +87,10 @@ app.use(
   },
   productsRouter
 );
+
 app.use("/api/carts", cartsRouter);
 app.use("/api/sessions", sessionsRouter);
+
+// Manejo de errores personalizado
+
+app.use(errorHandler);

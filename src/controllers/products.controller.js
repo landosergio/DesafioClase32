@@ -45,17 +45,12 @@ export default class ProductsController {
     }
   }
 
-  static async addProduct(req, res) {
+  static async addProduct(req, res, next) {
     let prod = req.body;
 
     try {
       let addProd = await productsService.addProduct(prod);
-      if (addProd == "missingInfo") {
-        res.setHeader("Content-Type", "application/json");
-        return res
-          .status(400)
-          .json({ message: "Datos del producto incompletos." });
-      }
+
       let realTimeProducts = await productsService.getRealTimeProducts();
       req.socketServer.emit("realTimeProducts", realTimeProducts);
       res.setHeader("Content-Type", "application/json");
@@ -63,11 +58,7 @@ export default class ProductsController {
         .status(200)
         .json({ message: "Producto agregado con id " + addProd._id });
     } catch (error) {
-      res.setHeader("Content-Type", "application/json");
-      return res.status(500).json({
-        error: `Error inesperado en el servidor - Intente más tarde, o contacte a su administrador`,
-        detalle: `${error.message}`,
-      });
+      return next(error);
     }
   }
 
